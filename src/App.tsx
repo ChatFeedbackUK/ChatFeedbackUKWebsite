@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Shield, MessageCircle, ArrowRight, Star, Mail, Zap, Target, TrendingUp, Eye, Activity, User, Calendar, AlertTriangle, Bot, Cpu } from 'lucide-react';
+import { CheckCircle, Shield, MessageCircle, ArrowRight, Star, Mail, Zap, Target, TrendingUp, Eye, Activity, User, Calendar, AlertTriangle, Bot, Cpu, FileText } from 'lucide-react';
+import CaseStudyShowcase from './components/CaseStudyShowcase';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('home');
   const [isVisible, setIsVisible] = useState({});
   const [typedText, setTypedText] = useState('');
   const [currentTestStep, setCurrentTestStep] = useState(0);
@@ -42,14 +44,14 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Live testing simulation
+  // Live testing simulation - Updated for comprehensive chatbot testing
   useEffect(() => {
     const testSteps = [
-      "Analyzing conversation flow...",
-      "Testing edge cases...",
+      "Analyzing conversation patterns...",
+      "Testing response accuracy...",
       "Checking brand consistency...",
-      "Validating security...",
-      "✓ Testing complete!"
+      "Evaluating user experience...",
+      "✓ Comprehensive testing complete!"
     ];
     
     const timer = setInterval(() => {
@@ -60,11 +62,11 @@ function App() {
   }, []);
 
   const testSteps = [
-    "Analyzing conversation flow...",
-    "Testing edge cases...",
+    "Analyzing conversation patterns...",
+    "Testing response accuracy...",
     "Checking brand consistency...",
-    "Validating security...",
-    "✓ Testing complete!"
+    "Evaluating user experience...",
+    "✓ Comprehensive testing complete!"
   ];
 
   // Calendly integration function
@@ -73,13 +75,24 @@ function App() {
     window.open('https://calendly.com/richard-chatfeedback/30min', '_blank', 'width=800,height=700');
   };
 
+  // Navigation function
+  const navigateToPage = (page: string) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
+
+  // If showing case study, render that component
+  if (currentPage === 'case-study') {
+    return <CaseStudyShowcase onScheduleCall={openCalendly} onBackToHome={() => navigateToPage('home')} />;
+  }
+
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Header with glassmorphism */}
       <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2 group">
+            <div className="flex items-center space-x-2 group cursor-pointer" onClick={() => navigateToPage('home')}>
               <div className="relative">
                 <MessageCircle className="h-8 w-8 text-blue-600 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
@@ -89,14 +102,21 @@ function App() {
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              {['Service', 'About', 'Founder', 'Contact'].map((item, index) => (
+              {[
+                { name: 'Service', href: '#service' },
+                { name: 'About', href: '#about' },
+                { name: 'Founder', href: '#founder' },
+                { name: 'Sprint Study', href: '#', onClick: () => navigateToPage('case-study') },
+                { name: 'Contact', href: '#contact' }
+              ].map((item, index) => (
                 <a 
-                  key={item}
-                  href={`#${item.toLowerCase()}`} 
-                  className="text-gray-600 hover:text-blue-600 transition-all duration-300 relative group"
+                  key={item.name}
+                  href={item.href}
+                  onClick={item.onClick ? (e) => { e.preventDefault(); item.onClick(); } : undefined}
+                  className="text-gray-600 hover:text-blue-600 transition-all duration-300 relative group cursor-pointer"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {item}
+                  {item.name}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
               ))}
@@ -129,18 +149,18 @@ function App() {
             </div>
             
             <div 
-              className="transform transition-all duration-1000 delay-500"
-              style={{ 
-                opacity: isVisible.hero ? 1 : 0,
-                transform: isVisible.hero ? 'translateY(0)' : 'translateY(30px)'
-              }}
+              id="hero"
+              data-animate
+              className={`transform transition-all duration-1000 delay-500 ${
+                isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
             >
               <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
                 Your chatbot is often the very first "employee" a customer interacts with. We ensure that conversation builds trust, not frustration. Through specialist adversarial testing, we help e-commerce startups turn their AI into their most reliable asset.
               </p>
             </div>
 
-            {/* Interactive Demo Box */}
+            {/* Interactive Demo Box - Updated */}
             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl mb-8 max-w-md mx-auto border border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
@@ -178,8 +198,14 @@ function App() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
-              <button className="group border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 relative overflow-hidden">
-                <span className="relative z-10">Learn More</span>
+              <button 
+                onClick={() => navigateToPage('case-study')}
+                className="group border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  <FileText className="mr-2 h-5 w-5" />
+                  View Sprint Study
+                </span>
                 <div className="absolute inset-0 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
               </button>
             </div>
@@ -348,7 +374,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
               { number: '99.9%', label: 'Uptime Reliability', icon: Zap },
-              { number: '40%', label: 'Avg. Satisfaction Increase', icon: TrendingUp },
+              { number: '67%', label: 'Major Brand Failure Rate', icon: AlertTriangle },
               { number: '500+', label: 'Edge Cases Tested', icon: Target },
               { number: '24/7', label: 'Monitoring Support', icon: Eye }
             ].map((stat, index) => (
@@ -418,7 +444,7 @@ function App() {
               }`}
             >
               <div className="text-center">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Trusted by E-commerce Leaders</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Real Results from Our Sprint Study</h3>
                 <div className="flex justify-center mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star 
@@ -428,16 +454,24 @@ function App() {
                   ))}
                 </div>
                 <p className="text-gray-600 italic mb-6">
-                  "ChatFeedback.chat helped us identify critical issues in our customer service bot that we never would have found otherwise. Our customer satisfaction scores improved by 40%."
+                  "Our independent analysis of ASOS and H&M revealed a shocking 67% failure rate across realistic customer scenarios. Even billion-dollar brands struggle with basic chatbot reliability."
                 </p>
-                <p className="text-sm text-gray-500">— Sarah Chen, CTO at TechFlow Commerce</p>
+                <p className="text-sm text-gray-500">— ChatFeedback.chat Research Team</p>
+                <button 
+                  onClick={() => navigateToPage('case-study')}
+                  className="mt-4 text-blue-600 hover:text-blue-800 font-medium flex items-center justify-center transition-colors"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Read Full Sprint Study
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Founder Section */}
+      {/* Founder Section - Updated with Profile Picture */}
       <section id="founder" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div 
@@ -462,9 +496,18 @@ function App() {
             >
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="flex-shrink-0">
-                  <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-xl">
-                    <User className="h-16 w-16 text-white" />
+                  {/* Profile Picture Container - You'll need to replace the src with your actual image */}
+                  <div className="w-32 h-32 rounded-full overflow-hidden shadow-xl border-4 border-white">
+                    <img 
+                      src="richard-profile.png" 
+                      alt="Richard - Founder of ChatFeedback.chat"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                  {/* Fallback if you haven't uploaded your image yet */}
+                  {/* <div className="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-xl">
+                    <User className="h-16 w-16 text-white" />
+                  </div> */}
                 </div>
                 
                 <div className="flex-1 text-center md:text-left">
@@ -506,16 +549,27 @@ function App() {
           <p className="text-xl text-blue-100 mb-8 animate-fade-in-up animation-delay-200">
             Don't let a poorly performing chatbot damage your brand. Get started with professional adversarial testing today.
           </p>
-          <button 
-            onClick={openCalendly}
-            className="group bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-2xl animate-fade-in-up animation-delay-400"
-          >
-            <span className="flex items-center">
-              <Calendar className="mr-2 h-5 w-5" />
-              Schedule Your Free Consultation
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button 
+              onClick={openCalendly}
+              className="group bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-2xl animate-fade-in-up animation-delay-400"
+            >
+              <span className="flex items-center justify-center">
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule Your Free Consultation
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+            <button 
+              onClick={() => navigateToPage('case-study')}
+              className="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300 font-semibold transform hover:scale-105"
+            >
+              <span className="flex items-center justify-center">
+                <FileText className="mr-2 h-5 w-5" />
+                View Our Sprint Study
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -619,14 +673,16 @@ function App() {
                 {[
                   { name: 'About', href: '#about' },
                   { name: 'Founder', href: '#founder' },
+                  { name: 'Sprint Study', href: '#', onClick: () => navigateToPage('case-study') },
                   { name: 'Contact', href: '#contact' },
                   { name: 'Privacy Policy', href: '#' },
                   { name: 'Terms of Service', href: '#' }
                 ].map((link, index) => (
                   <li key={index}>
                     <a 
-                      href={link.href} 
-                      className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                      href={link.href}
+                      onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
+                      className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block cursor-pointer"
                     >
                       {link.name}
                     </a>

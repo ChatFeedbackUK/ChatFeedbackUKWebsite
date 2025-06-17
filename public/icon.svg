@@ -1,0 +1,23 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chatbubble-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Chat Bubble Background -->
+  <path d="M32 64C32 46.33 46.33 32 64 32H192C209.67 32 224 46.33 224 64V144C224 161.67 209.67 176 192 176H104L64 208V176H64C46.33 176 32 161.67 32 144V64Z"
+        fill="url(#chatbubble-gradient)" filter="url(#glow)" />
+
+  <!-- Checkmark (now higher) -->
+  <path d="M96 96L120 120L160 72"
+        stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
